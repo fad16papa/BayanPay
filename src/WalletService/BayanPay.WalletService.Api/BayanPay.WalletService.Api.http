@@ -1,0 +1,6 @@
+@BayanPay.WalletService.Api_HostAddress = http://localhost:5070
+
+GET {{BayanPay.WalletService.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
