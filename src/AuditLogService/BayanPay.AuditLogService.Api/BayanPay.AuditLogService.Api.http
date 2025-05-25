@@ -1,0 +1,6 @@
+@BayanPay.AuditLogService.Api_HostAddress = http://localhost:5077
+
+GET {{BayanPay.AuditLogService.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

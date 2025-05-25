@@ -1,0 +1,6 @@
+@BayanPay.AgentHubService.Api_HostAddress = http://localhost:5113
+
+GET {{BayanPay.AgentHubService.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
