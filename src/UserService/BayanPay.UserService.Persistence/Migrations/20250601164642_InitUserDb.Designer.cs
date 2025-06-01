@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BayanPay.UserService.Persistence.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20250526164030_InitUserDb")]
+    [Migration("20250601164642_InitUserDb")]
     partial class InitUserDb
     {
         /// <inheritdoc />
@@ -31,17 +31,42 @@ namespace BayanPay.UserService.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateOnly>("BirthDate")
+                        .HasColumnType("date");
+
                     b.Property<string>("ClerkUserId")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Role")
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdateDateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
