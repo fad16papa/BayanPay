@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BayanPay.UserService.Persistence\BayanPay.UserService.Persistence.csproj" />
+    <ProjectReference Include="..\BayanPay.UserService.Application\BayanPay.UserService.Application.csproj" />
   </ItemGroup>
 
 </Project>

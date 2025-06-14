@@ -1,5 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <ItemGroup>
+    <ProjectReference Include="..\BayanPay.UserService.Domain\BayanPay.UserService.Domain.csproj" />
+    <ProjectReference Include="..\BayanPay.UserService.Persistence\BayanPay.UserService.Persistence.csproj" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
