@@ -11,6 +11,13 @@ public interface IUserService
     Task<AppUser> GetUserByIdAsync(Guid userId);
 
     /// <summary>
+    /// Retrieves a user by their unique identifier.
+    /// </summary>
+    /// <param name="userId">The unique identifier of the user.</param>
+    /// <returns>A task that represents the asynchronous operation, containing the user details.</returns>
+    Task<AppUser> GetUserByClerkIdAsync(string clerkUserId);
+
+    /// <summary>
     /// Creates a new user with the specified details.
     /// </summary>
     /// <param name="appUser">The details of the user to create.</param>
@@ -29,5 +36,5 @@ public interface IUserService
     /// </summary>
     /// <param name="userId">The unique identifier of the user to delete.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task DeleteUserAsync(Guid userId);
+    Task<bool> DeleteUserAsync(Guid userId);
 }

@@ -9,9 +9,9 @@ public class GetUserById
 {
     public class Query : IRequest<AppUser>
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
-        public Query(string id)
+        public Query(Guid id)
         {
             Id = id;
         }
@@ -30,7 +30,7 @@ public class GetUserById
         {
             return await _context.Users
                 .AsNoTracking()
-                .FirstOrDefaultAsync(u => u.Id.ToString() == request.Id, cancellationToken);
+                .FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
         }
     }
 }

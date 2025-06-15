@@ -1,29 +1,30 @@
 using BayanPay.UserService.Api.Interfaces;
+using BayanPay.UserService.Application.Users.Commands;
+using BayanPay.UserService.Application.Users.Queries;
 using BayanPay.UserService.Domain;
 using BayanPay.UserService.Persistence;
+using MediatR;
 
 namespace BayanPay.UserService.Api.Services;
 
 public class UserService : IUserService
 {
     private readonly UserDbContext _dbContext;
+    private readonly IMediator _mediator;
 
-    public UserService(UserDbContext dbContext)
+    public UserService(UserDbContext dbContext, IMediator mediator)
     {
         _dbContext = dbContext;
+        _mediator = mediator;
     }
 
     public async Task<AppUser> CreateUserAsync(AppUser appUser)
     {
         try
         {
-            if (appUser == null)
-            {
-                throw new ArgumentNullException(nameof(appUser), "User is null");
-            }
+            var result = await _mediator.Send(new CreateUser.Command(appUser));
 
-            await _dbContext.Users.AddAsync(appUser);
-            return await _dbContext.SaveChangesAsync().ContinueWith(t => appUser);
+            return result;
         }
         catch (Exception)
         {
@@ -31,18 +32,27 @@ public class UserService : IUserService
         }
     }
 
-    public async Task DeleteUserAsync(Guid userId)
+    public async Task<bool> DeleteUserAsync(Guid userId)
     {
         try
         {
-            var user = await _dbContext.Users.FindAsync(userId);
-            if (user == null)
-            {
-                throw new KeyNotFoundException($"User with ID {userId} not found."); 
-            }
+            var result = await _mediator.Send(new DeleteUser.Command(userId));
 
-            _dbContext.Users.Remove(user); 
-            await _dbContext.SaveChangesAsync();
+            return result;
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
+    public async Task<AppUser> GetUserByClerkIdAsync(string clerkUserId)
+    {
+        try
+        {
+            var result = await _mediator.Send(new GetUserByClerkId.Query(clerkUserId));
+
+            return result;
         }
         catch (Exception)
         {
@@ -54,14 +64,9 @@ public class UserService : IUserService
     {
         try
         {
-            var user = await _dbContext.Users.FindAsync(userId);
+            var result = await _mediator.Send(new GetUserById.Query(userId));
 
-            if (user == null)
-            {
-                throw new KeyNotFoundException($"User with ID {userId} not found.");
-            }
-
-            return user;
+            return result;
         }
         catch (Exception)
         {
@@ -73,13 +78,9 @@ public class UserService : IUserService
     {
         try
         {
-            if (appUser == null)
-            {
-                throw new ArgumentNullException(nameof(appUser), "User is null");
-            }
+            var result = await _mediator.Send(new UpdateUser.Command(appUser));
 
-            _dbContext.Users.Update(appUser);
-            return await _dbContext.SaveChangesAsync().ContinueWith(t => appUser);
+            return result;
         }
         catch (Exception)
         {

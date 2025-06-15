@@ -9,6 +9,11 @@ public class CreateUser
     {
         public AppUser User { get; set; }
 
+        public Command(AppUser user)
+        {
+            User = user;
+        }
+
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
