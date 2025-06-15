@@ -2,10 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BayanPay.Common.Models
 {
-    public class UserModel
+    public class UserModel : AuditModel
     {
-        [Required]
-        public Guid UserID { get; set; } = Guid.NewGuid();
         [Required]
         public string FirstName { get; set; }
         [Required]
@@ -16,9 +14,5 @@ namespace BayanPay.Common.Models
         public string Address { get; set; }
         [Required]
         public DateOnly BirthDate { get; set; }
-        [Required]
-        public DateTime CreatedDateTime { get; set; } = DateTime.UtcNow;
-        [Required]
-        public DateTime UpdateDateTime { get; set; } = DateTime.UtcNow;
     }
 }

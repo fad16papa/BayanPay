@@ -11,6 +11,19 @@ namespace BayanPay.UserService.Domain
         public string ClerkUserId { get; set; }  // from Clerk
         [Required]
         public string Role { get; set; }  // Optional: agent, admin, etc.
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public AppUser(Guid id, string firstName, string lastName, string email, string address, DateOnly birthDate, string clerkUserId, string role)
+        {
+            Id = id;
+            FirstName = firstName;
+            LastName = lastName;
+            Email = email;
+            Address = address;
+            BirthDate = birthDate;
+            ClerkUserId = clerkUserId;
+            Role = role;
+            CreatedDateTime = DateTime.UtcNow;
+            UpdateDateTime = DateTime.UtcNow;
+        }
     }
 }
