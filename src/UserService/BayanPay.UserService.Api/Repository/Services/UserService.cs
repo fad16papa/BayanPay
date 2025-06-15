@@ -1,8 +1,8 @@
-using BayanPay.UserService.Application.Interfaces;
+using BayanPay.UserService.Api.Interfaces;
 using BayanPay.UserService.Domain;
 using BayanPay.UserService.Persistence;
 
-namespace BayanPay.UserService.Application.Services;
+namespace BayanPay.UserService.Api.Services;
 
 public class UserService : IUserService
 {
@@ -38,7 +38,7 @@ public class UserService : IUserService
             var user = await _dbContext.Users.FindAsync(userId);
             if (user == null)
             {
-                throw new KeyNotFoundException($"User with ID {userId} not found.");
+                throw new KeyNotFoundException($"User with ID {userId} not found."); 
             }
 
             _dbContext.Users.Remove(user); 

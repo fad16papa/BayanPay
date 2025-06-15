@@ -1,4 +1,4 @@
-using BayanPay.UserService.Application.Interfaces;
+using BayanPay.UserService.Api.Interfaces;
 using BayanPay.UserService.Domain;
 using Microsoft.AspNetCore.Mvc;
 

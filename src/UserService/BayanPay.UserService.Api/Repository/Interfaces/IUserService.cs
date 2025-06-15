@@ -1,6 +1,6 @@
 using BayanPay.UserService.Domain;
 
-namespace BayanPay.UserService.Application.Interfaces;
+namespace BayanPay.UserService.Api.Interfaces;
 public interface IUserService
 {
     /// <summary>
