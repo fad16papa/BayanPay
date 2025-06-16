@@ -9,12 +9,10 @@ namespace BayanPay.UserService.Api.Services;
 
 public class UserService : IUserService
 {
-    private readonly UserDbContext _dbContext;
     private readonly IMediator _mediator;
 
     public UserService(UserDbContext dbContext, IMediator mediator)
     {
-        _dbContext = dbContext;
         _mediator = mediator;
     }
 

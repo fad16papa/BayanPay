@@ -1,4 +1,5 @@
 using BayanPay.UserService.Persistence;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,14 @@ public class DeleteUser
         public Command(Guid id)
         {
             Id = id;
+        }
+
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.Id).NotEmpty().WithMessage("Id is required.");
+            }
         }
     }
 
