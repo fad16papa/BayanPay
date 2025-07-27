@@ -19,7 +19,7 @@ public class UpdateUser
         {
             public CommandValidator()
             {
-                RuleFor(x => x.User.ClerkUserId).NotEmpty().WithMessage("ClerkUserIdis required.");
+                RuleFor(x => x.User.ClerkUserId).NotEmpty().WithMessage("ClerkUserId is required.");
                 RuleFor(x => x.User.FirstName).NotEmpty().WithMessage("FirstName is required.");
                 RuleFor(x => x.User.LastName).NotEmpty().WithMessage("LastName is required.");
                 RuleFor(x => x.User.Email).NotEmpty().WithMessage("Email is required.");
