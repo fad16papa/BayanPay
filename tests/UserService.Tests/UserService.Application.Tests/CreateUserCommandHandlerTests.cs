@@ -2,36 +2,43 @@
 using BayanPay.UserService.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
 public class CreateUserCommandHandlerTests
 {
-    private UserDbContext GetInMemoryDbContext()
+    private UserDbContext GetPostgresDbContext()
     {
         var options = new DbContextOptionsBuilder<UserDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // Isolated DB for each test
+            .UseNpgsql("Host=localhost;Port=5432;Database=userdb;Username=postgres;Password=yourpassword")
             .Options;
 
-        return new UserDbContext(options);
+        var context = new UserDbContext(options);
+
+        // var test = Dns.GetHostEntry("postgres"); // Ensure the DNS resolution works
+        // // For test isolation
+        // context.Database.EnsureDeleted(); // Optional: resets schema
+        // context.Database.EnsureCreated(); // Recreates schema
+        return context;
     }
 
     [Fact]
     public async Task Handle_ShouldAddUser_WhenUserIsValid()
     {
         // Arrange
-        var context = GetInMemoryDbContext();
+        var context = GetPostgresDbContext();
         var handler = new CreateUser.Command.Handler(context);
 
         var user = new AppUser
         {
-            ClerkUserId = "clerk_001",
-            FirstName = "Francis",
+            ClerkUserId = "clerk_002",
+            FirstName = "Mary",
             LastName = "Decena",
-            Email = "francis@example.com",
+            Email = "mary@example.com",
             Address = "Manila",
-            BirthDate = new DateOnly(1990, 1, 1),
+            BirthDate = new DateOnly(1987, 11, 27),
             Role = "Admin",
             CreatedDateTime = DateTime.UtcNow,
             CreatedBy = "System"
@@ -44,9 +51,9 @@ public class CreateUserCommandHandlerTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal("Francis", result.FirstName);
+        Assert.Equal("Mary", result.FirstName);
 
-        var savedUser = await context.Users.FirstOrDefaultAsync(u => u.Email == "francis@example.com");
+        var savedUser = await context.Users.FirstOrDefaultAsync(u => u.Email == "mary@example.com");
         Assert.NotNull(savedUser);
     }
 
@@ -54,7 +61,7 @@ public class CreateUserCommandHandlerTests
     public async Task Handle_ShouldThrowArgumentNullException_WhenUserIsNull()
     {
         // Arrange
-        var context = GetInMemoryDbContext();
+        var context = GetPostgresDbContext();
         var handler = new CreateUser.Command.Handler(context);
         var command = new CreateUser.Command(null);
 

@@ -26,6 +26,7 @@ public class CreateUser
                 RuleFor(x => x.User.BirthDate).NotEmpty().WithMessage("BirthDate is required.");
                 RuleFor(x => x.User.Role).NotEmpty().WithMessage("Role is required.");
                 RuleFor(x => x.User.CreatedDateTime).NotEmpty().WithMessage("CreatedDateTime is required.");
+                RuleFor(x => x.User.UpdateDateTime).NotEmpty().WithMessage("UpdateDateTime is required.");
                 RuleFor(x => x.User.CreatedBy).NotEmpty().WithMessage("CreatedBy is required.");
             }
         }
