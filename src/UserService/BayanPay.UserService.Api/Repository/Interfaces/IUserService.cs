@@ -36,5 +36,5 @@ public interface IUserService
     /// </summary>
     /// <param name="userId">The unique identifier of the user to delete.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task<bool> DeleteUserAsync(Guid userId);
+    Task<AppUser> DeleteUserAsync(AppUser appUser);
 }

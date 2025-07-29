@@ -1,5 +1,5 @@
 using BayanPay.UserService.Api.Interfaces;
-using BayanPay.UserService.Application.Users.Commands;
+using BayanPay.UserService.Application.Commands;
 using BayanPay.UserService.Application.Users.Queries;
 using BayanPay.UserService.Domain;
 using BayanPay.UserService.Persistence;
@@ -30,11 +30,11 @@ public class UserService : IUserService
         }
     }
 
-    public async Task<bool> DeleteUserAsync(Guid userId)
+    public async Task<AppUser> DeleteUserAsync(AppUser appUser)
     {
         try
         {
-            var result = await _mediator.Send(new DeleteUser.Command(userId));
+            var result = await _mediator.Send(new DeleteUser.Command(appUser));
 
             return result;
         }

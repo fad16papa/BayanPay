@@ -1,51 +1,55 @@
+using BayanPay.UserService.Domain;
 using BayanPay.UserService.Persistence;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace BayanPay.UserService.Application.Users.Commands;
+namespace BayanPay.UserService.Application.Commands;
 
 public class DeleteUser
 {
-    public class Command : IRequest<bool>
+    public class Command : IRequest<AppUser>
     {
-        public Guid Id { get; set; }  // Primary key of the user to delete
+        public AppUser User { get; set; } // Primary key of the user to delete
 
-        public Command(Guid id)
+        public Command(AppUser user)
         {
-            Id = id;
+            User = user;
         }
 
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(x => x.Id).NotEmpty().WithMessage("Id is required.");
+                RuleFor(x => x.User.Id).NotEmpty().WithMessage("Id is required.");
             }
         }
-    }
 
-    public class Handler : IRequestHandler<Command, bool>
-    {
-        private readonly UserDbContext _userDbContext;
-
-        public Handler(UserDbContext userDbContext)
+        public class Handler : IRequestHandler<Command, AppUser>
         {
-            _userDbContext = userDbContext;
-        }
+            private readonly UserDbContext _userDbContext;
 
-        public async Task<bool> Handle(Command request, CancellationToken cancellationToken)
-        {
-            var user = await _userDbContext.Users
-                .FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
+            public Handler(UserDbContext userDbContext)
+            {
+                _userDbContext = userDbContext;
+            }
 
-            if (user == null)
-                return false;
 
-            _userDbContext.Users.Remove(user);
-            await _userDbContext.SaveChangesAsync(cancellationToken);
+            public async Task<AppUser> Handle(Command request, CancellationToken cancellationToken)
+            {
+                var user = await _userDbContext.Users
+                    .FirstOrDefaultAsync(u => u.Id == request.User.Id, cancellationToken);
 
-            return true;
+                if (user == null)
+                {
+                    throw new ArgumentNullException(nameof(request.User), "User cannot be null.");
+                }
+
+                _userDbContext.Users.Remove(user);
+                await _userDbContext.SaveChangesAsync(cancellationToken);
+
+                return user;
+            }
         }
     }
 }
