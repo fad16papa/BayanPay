@@ -30,11 +30,11 @@ public class UserService : IUserService
         }
     }
 
-    public async Task<AppUser> DeleteUserAsync(AppUser appUser)
+    public async Task<bool> DeleteUserAsync(Guid id)
     {
         try
         {
-            var result = await _mediator.Send(new DeleteUser.Command(appUser));
+            var result = await _mediator.Send(new DeleteUser.Command(id));
 
             return result;
         }

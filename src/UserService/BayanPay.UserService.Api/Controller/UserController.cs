@@ -62,7 +62,7 @@ class UserController : ControllerBase
                 return NotFound($"User with ID {userId} not found.");
             }
             
-            await _userService.DeleteUserAsync(user);
+            await _userService.DeleteUserAsync(userId);
             return NoContent();
         }
         catch (KeyNotFoundException ex)

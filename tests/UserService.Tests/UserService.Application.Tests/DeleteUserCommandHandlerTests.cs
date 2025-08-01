@@ -29,17 +29,14 @@ public class DeleteUserCommandHandlerTests
         var context = GetPostgresDbContext();
         var handler = new DeleteUser.Command.Handler(context);
 
-        var user = new AppUser
-        {
-            Id = new Guid("5805d409-b996-4701-aa87-dbd74568deb4"),
-        };
+        var Id = new Guid("8fd2a72a-a209-4841-8e50-1d57d6503495");
 
-        var command = new DeleteUser.Command(user);
+        var command = new DeleteUser.Command(Id);
         // Act
         await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        var deletedUser = await context.Users.FindAsync(user.Id);
+        var deletedUser = await context.Users.FindAsync(Id);
         deletedUser.Should().BeNull();
     }
 }
