@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BayanPay.UserService.Api.Controller;
 
+[ApiController]
+[Route("api/[controller]")]
 class UserController : ControllerBase
 {
     private readonly IUserService _userService;
@@ -19,6 +21,24 @@ class UserController : ControllerBase
         try
         {
             var user = await _userService.GetUserByIdAsync(userId);
+            return Ok(user);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
+    }
+
+    [HttpGet("{userId}")]
+    public async Task<IActionResult> GetUserByClerkId(string userId)
+    {
+        try
+        {
+            var user = await _userService.GetUserByClerkIdAsync(userId);
             return Ok(user);
         }
         catch (KeyNotFoundException ex)
@@ -56,12 +76,12 @@ class UserController : ControllerBase
         try
         {
             var user = await _userService.GetUserByIdAsync(userId);
-            
+
             if (user == null)
             {
                 return NotFound($"User with ID {userId} not found.");
             }
-            
+
             await _userService.DeleteUserAsync(userId);
             return NoContent();
         }
