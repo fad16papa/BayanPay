@@ -2,6 +2,7 @@ using BayanPay.UserService.Domain;
 using BayanPay.UserService.Persistence;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 public class CreateUser
 {
@@ -30,7 +31,7 @@ public class CreateUser
                 RuleFor(x => x.User.CreatedBy).NotEmpty().WithMessage("CreatedBy is required.");
             }
         }
-        
+
         public class Handler : IRequestHandler<Command, AppUser>
         {
             private readonly UserDbContext _userDbContext;
@@ -47,10 +48,18 @@ public class CreateUser
                     throw new ArgumentNullException(nameof(request.User), "User cannot be null.");
                 }
 
+                var userAlreadyExists = await _userDbContext.Users
+                    .AnyAsync(u => u.Email == request.User.Email && u.ClerkUserId == request.User.ClerkUserId, cancellationToken);
+
+                if (userAlreadyExists)
+                {
+                    throw new InvalidOperationException("User with the same email and ClerkUserId already exists.");
+                }
+
                 await _userDbContext.Users.AddAsync(request.User);
                 await _userDbContext.SaveChangesAsync(cancellationToken);
                 return request.User;
             }
         }
-    } 
+    }
 }
