@@ -28,12 +28,12 @@ public class UpdateUserCommandHandlerTests
 
         var user = new AppUser
         {
-            Id = new Guid("737c2c42-e843-49df-a196-69f80880cc6b"),
+            Id = new Guid("ca77d082-e7cd-4947-a63f-60cd0abbd53e"),
             ClerkUserId = "clerk_002",
             FirstName = "Mary",
             LastName = "Decena",
             Email = "mary@example.com",
-            Address = "Manila",
+            Address = "Quezon City",
             BirthDate = new DateOnly(1987, 11, 27),
             Role = "Admin",
             CreatedDateTime = DateTime.UtcNow,
