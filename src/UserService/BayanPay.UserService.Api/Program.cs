@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using BayanPay.UserService.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -21,8 +22,9 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer("Clerk", options =>
 {
-    options.Authority = "https://clerk.xxx"; // Clerk JWT issuer
-    options.Audience = "your-client-id";     // Optional for Clerk JWTs
+    // Authority is your Clerk instance (e.g. https://your-app.clerk.accounts.dev or https://clerk.yourdomain.com)
+    options.Authority = builder.Configuration["Clerk:Authority"];
+    // Clerk access tokens often don't require audience validation for your API; set to false unless you configured an audience.
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
@@ -31,6 +33,9 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true
     };
 });
+
+builder.Services.AddAuthorization();
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
@@ -41,6 +46,8 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -48,6 +55,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.MapGet("/me", async (ClaimsPrincipal user, UserDbContext db) =>
+{
+    // get Clerk user id from token claim "sub" (or "clerk_user_id" if you’ve mapped it)
+    var clerkUserId = user.FindFirst("sub")?.Value;
+    if (string.IsNullOrEmpty(clerkUserId)) return Results.Unauthorized();
+
+    var me = await db.Users.FirstOrDefaultAsync(u => u.ClerkUserId == clerkUserId);
+    return me is null ? Results.NotFound() : Results.Ok(me);
+})
+.RequireAuthorization();
 
 app.UseHttpsRedirection();
 app.MapControllers();

@@ -29,7 +29,7 @@ public class DeleteUserCommandHandlerTests
         var context = GetPostgresDbContext();
         var handler = new DeleteUser.Command.Handler(context);
 
-        var Id = new Guid("91bcb057-b4e4-4a60-b003-4dfb7330e41f");
+        var Id = new Guid("ca77d082-e7cd-4947-a63f-60cd0abbd53e");
 
         var command = new DeleteUser.Command(Id);
         // Act
