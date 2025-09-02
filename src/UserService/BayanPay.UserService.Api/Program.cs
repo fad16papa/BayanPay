@@ -15,24 +15,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<UserDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("UserDb")));
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer("Clerk", options =>
-{
-    // Authority is your Clerk instance (e.g. https://your-app.clerk.accounts.dev or https://clerk.yourdomain.com)
-    options.Authority = builder.Configuration["Clerk:Authority"];
-    // Clerk access tokens often don't require audience validation for your API; set to false unless you configured an audience.
-    options.TokenValidationParameters = new TokenValidationParameters
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer("Clerk", o =>
     {
-        ValidateIssuer = true,
-        ValidateAudience = false,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true
-    };
-});
+        o.Authority = builder.Configuration["Clerk:Authority"]; // e.g. https://your-app.clerk.accounts.dev
+        o.TokenValidationParameters = new TokenValidationParameters {
+            ValidateIssuer = true, ValidateAudience = false, ValidateLifetime = true, ValidateIssuerSigningKey = true
+        };
+    });
 
 builder.Services.AddAuthorization();
 
