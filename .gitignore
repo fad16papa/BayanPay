@@ -55,3 +55,11 @@ nunit-*.xml
 
 # SQL DB Store
 .DS_Store
+
+# Appsettings files
+appsettings.Development.json
+appsettings.Local.json
+appsettings.Staging.json
+appsettings.Production.json
+appsettings.Test.json
+appsettings.json
