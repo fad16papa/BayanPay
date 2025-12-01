@@ -5,6 +5,13 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+//HttpClient to talk to your User API
+builder.Services.AddHttpClient("UserService", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["UserService:BaseUrl"]
+    ?? throw new InvalidOperationException("UserService BaseUrl is not configured."));
+});
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
