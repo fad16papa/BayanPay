@@ -33,10 +33,10 @@ public class CreateUserCommandHandlerTests
 
         var user = new AppUser
         {
-            ClerkUserId = "clerk_002",
-            FirstName = "Mary",
+            ClerkUserId = "clerk_003",
+            FirstName = "Ferdinand",
             LastName = "Decena",
-            Email = "mary@example.com",
+            Email = "Ferdinand@example.com",
             Address = "Manila",
             BirthDate = new DateOnly(1987, 11, 27),
             Role = "Admin",
@@ -51,9 +51,13 @@ public class CreateUserCommandHandlerTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal("Mary", result.FirstName);
+        Assert.Equal(user.FirstName, result.FirstName);
+        Assert.Equal(user.LastName, result.LastName);
+        Assert.Equal(user.Email, result.Email);
 
-        var savedUser = await context.Users.FirstOrDefaultAsync(u => u.Email == "mary@example.com");
+        await Assert.ThrowsAsync<InvalidOperationException>(() => handler.Handle(command, CancellationToken.None));
+
+        var savedUser = await context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
         Assert.NotNull(savedUser);
     }
 
